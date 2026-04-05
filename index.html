@@ -1,1 +1,1112 @@
+<!DOCTYPE html>
 
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You Cake My Day — Il compleanno dei tuoi dipendenti, automatico.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F0E6;
+    --orange: #D4622A;
+    --brown: #2C1A0E;
+    --warm-gray: #8C7B6B;
+    --light-brown: #C4A882;
+    --accent: #E8974A;
+    --white: #FDFAF6;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–cream);
+color: var(–brown);
+overflow-x: hidden;
+cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+width: 12px; height: 12px;
+background: var(–orange);
+border-radius: 50%;
+position: fixed;
+pointer-events: none;
+z-index: 9999;
+transition: transform 0.15s ease, width 0.2s, height 0.2s;
+transform: translate(-50%, -50%);
+}
+.cursor-ring {
+width: 36px; height: 36px;
+border: 1.5px solid var(–orange);
+border-radius: 50%;
+position: fixed;
+pointer-events: none;
+z-index: 9998;
+transform: translate(-50%, -50%);
+transition: all 0.3s ease;
+opacity: 0.5;
+}
+
+/* NAVBAR */
+nav {
+position: fixed; top: 0; left: 0; right: 0;
+z-index: 100;
+padding: 24px 48px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: transparent;
+transition: background 0.4s, padding 0.4s;
+}
+nav.scrolled {
+background: rgba(247,240,230,0.95);
+backdrop-filter: blur(12px);
+padding: 16px 48px;
+border-bottom: 1px solid rgba(196,168,130,0.2);
+}
+.nav-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 600;
+color: var(–brown);
+text-decoration: none;
+letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(–orange); }
+.nav-links {
+display: flex; align-items: center; gap: 36px;
+list-style: none;
+}
+.nav-links a {
+font-size: 14px; font-weight: 400;
+color: var(–warm-gray);
+text-decoration: none;
+letter-spacing: 0.3px;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(–brown); }
+.nav-right {
+display: flex; align-items: center; gap: 20px;
+}
+.lang-switch {
+font-size: 13px; font-weight: 500;
+color: var(–warm-gray);
+background: none; border: 1px solid rgba(140,123,107,0.3);
+border-radius: 20px; padding: 6px 14px;
+cursor: none; transition: all 0.2s;
+letter-spacing: 0.5px;
+}
+.lang-switch:hover { border-color: var(–orange); color: var(–orange); }
+.btn-demo {
+background: var(–brown);
+color: var(–cream);
+padding: 12px 28px;
+border-radius: 4px;
+font-size: 14px; font-weight: 500;
+text-decoration: none;
+transition: background 0.2s, transform 0.2s;
+letter-spacing: 0.3px;
+}
+.btn-demo:hover { background: var(–orange); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+min-height: 100vh;
+display: grid;
+grid-template-columns: 1fr 1fr;
+position: relative;
+overflow: hidden;
+}
+.hero-left {
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 140px 64px 80px 80px;
+position: relative;
+z-index: 2;
+}
+.hero-tag {
+display: inline-flex; align-items: center; gap: 8px;
+font-size: 12px; font-weight: 500;
+color: var(–orange);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 32px;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.2s;
+}
+.hero-tag::before {
+content: ‘’; width: 24px; height: 1px;
+background: var(–orange);
+}
+.hero h1 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(52px, 5.5vw, 80px);
+font-weight: 300;
+line-height: 1.1;
+color: var(–brown);
+margin-bottom: 28px;
+opacity: 0;
+animation: fadeUp 0.9s ease forwards 0.4s;
+}
+.hero h1 em {
+font-style: italic;
+color: var(–orange);
+}
+.hero-sub {
+font-size: 17px;
+line-height: 1.7;
+color: var(–warm-gray);
+max-width: 440px;
+margin-bottom: 48px;
+font-weight: 300;
+opacity: 0;
+animation: fadeUp 0.9s ease forwards 0.6s;
+}
+.hero-cta {
+display: flex; align-items: center; gap: 24px;
+opacity: 0;
+animation: fadeUp 0.9s ease forwards 0.8s;
+}
+.btn-primary {
+background: var(–orange);
+color: var(–white);
+padding: 16px 36px;
+border-radius: 4px;
+font-size: 15px; font-weight: 500;
+text-decoration: none;
+transition: all 0.25s;
+letter-spacing: 0.3px;
+display: inline-flex; align-items: center; gap: 10px;
+}
+.btn-primary:hover { background: var(–brown); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(44,26,14,0.2); }
+.btn-primary svg { transition: transform 0.2s; }
+.btn-primary:hover svg { transform: translateX(4px); }
+.hero-note {
+font-size: 13px; color: var(–warm-gray);
+display: flex; align-items: center; gap: 8px;
+}
+.hero-note::before { content: ‘✓’; color: var(–orange); font-weight: 600; }
+
+.hero-right {
+position: relative;
+display: flex; align-items: center; justify-content: center;
+padding: 120px 80px 80px 40px;
+opacity: 0;
+animation: fadeIn 1.2s ease forwards 0.6s;
+}
+.hero-bg-circle {
+position: absolute;
+width: 600px; height: 600px;
+background: radial-gradient(circle, rgba(212,98,42,0.08) 0%, transparent 70%);
+border-radius: 50%;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+}
+
+/* DASHBOARD MOCKUP */
+.dashboard-mockup {
+background: var(–white);
+border-radius: 16px;
+box-shadow: 0 40px 80px rgba(44,26,14,0.15), 0 0 0 1px rgba(196,168,130,0.2);
+width: 100%;
+max-width: 480px;
+overflow: hidden;
+transform: perspective(1000px) rotateY(-6deg) rotateX(2deg);
+transition: transform 0.5s ease;
+}
+.dashboard-mockup:hover { transform: perspective(1000px) rotateY(-2deg) rotateX(0deg); }
+.mockup-bar {
+background: var(–brown);
+padding: 14px 20px;
+display: flex; align-items: center; gap: 8px;
+}
+.mockup-dot {
+width: 10px; height: 10px; border-radius: 50%;
+}
+.mockup-bar-title {
+font-size: 12px; color: rgba(247,240,230,0.6);
+margin-left: 8px; font-weight: 300; letter-spacing: 0.5px;
+}
+.mockup-body { padding: 24px; }
+.mockup-section-title {
+font-size: 11px; font-weight: 500;
+color: var(–warm-gray);
+text-transform: uppercase; letter-spacing: 1.5px;
+margin-bottom: 16px;
+}
+.cake-row {
+display: flex; align-items: center;
+padding: 14px 16px;
+border-radius: 10px;
+margin-bottom: 10px;
+background: var(–cream);
+border: 1px solid rgba(196,168,130,0.2);
+transition: background 0.2s;
+}
+.cake-row.upcoming { background: rgba(212,98,42,0.06); border-color: rgba(212,98,42,0.2); }
+.cake-emoji { font-size: 22px; margin-right: 14px; }
+.cake-info { flex: 1; }
+.cake-name { font-size: 14px; font-weight: 500; color: var(–brown); }
+.cake-date { font-size: 12px; color: var(–warm-gray); margin-top: 2px; }
+.cake-badge {
+font-size: 11px; font-weight: 500;
+padding: 4px 10px; border-radius: 20px;
+}
+.badge-soon { background: rgba(212,98,42,0.12); color: var(–orange); }
+.badge-ok { background: rgba(44,26,14,0.08); color: var(–warm-gray); }
+.mockup-divider { height: 1px; background: rgba(196,168,130,0.2); margin: 20px 0; }
+.mockup-stat-row {
+display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+}
+.mockup-stat {
+background: var(–cream);
+border-radius: 10px;
+padding: 14px;
+text-align: center;
+border: 1px solid rgba(196,168,130,0.2);
+}
+.stat-num {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 28px; font-weight: 600;
+color: var(–brown); line-height: 1;
+}
+.stat-label { font-size: 11px; color: var(–warm-gray); margin-top: 4px; }
+
+/* FLOATING BADGE */
+.floating-badge {
+position: absolute;
+bottom: 120px; left: -24px;
+background: var(–white);
+border-radius: 14px;
+padding: 16px 20px;
+box-shadow: 0 20px 40px rgba(44,26,14,0.12);
+border: 1px solid rgba(196,168,130,0.2);
+display: flex; align-items: center; gap: 12px;
+animation: float 4s ease-in-out infinite;
+}
+.badge-icon { font-size: 28px; }
+.badge-text { font-size: 12px; }
+.badge-text strong { display: block; color: var(–brown); font-weight: 500; font-size: 14px; }
+.badge-text span { color: var(–warm-gray); }
+
+@keyframes float {
+0%, 100% { transform: translateY(0px); }
+50% { transform: translateY(-8px); }
+}
+
+/* HERO SCROLL INDICATOR */
+.scroll-hint {
+position: absolute;
+bottom: 40px; left: 80px;
+display: flex; align-items: center; gap: 12px;
+font-size: 12px; color: var(–warm-gray);
+letter-spacing: 1px; text-transform: uppercase;
+opacity: 0;
+animation: fadeIn 1s ease forwards 1.5s;
+}
+.scroll-line {
+width: 48px; height: 1px;
+background: var(–light-brown);
+position: relative; overflow: hidden;
+}
+.scroll-line::after {
+content: ‘’;
+position: absolute; top: 0; left: -100%;
+width: 100%; height: 100%;
+background: var(–orange);
+animation: scrollLine 2s ease infinite 2s;
+}
+@keyframes scrollLine {
+0% { left: -100%; } 100% { left: 100%; }
+}
+
+/* SECTION STYLES */
+section { position: relative; }
+
+.section-label {
+font-size: 11px; font-weight: 500;
+color: var(–orange);
+letter-spacing: 3px;
+text-transform: uppercase;
+margin-bottom: 20px;
+display: flex; align-items: center; gap: 12px;
+}
+.section-label::after {
+content: ‘’; flex: 1; max-width: 40px;
+height: 1px; background: var(–orange);
+}
+
+/* HOW IT WORKS */
+.how {
+padding: 140px 80px;
+background: var(–brown);
+color: var(–cream);
+position: relative;
+overflow: hidden;
+}
+.how::before {
+content: ‘’;
+position: absolute; top: -200px; right: -200px;
+width: 600px; height: 600px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(212,98,42,0.15) 0%, transparent 70%);
+}
+.how .section-label { color: var(–accent); }
+.how .section-label::after { background: var(–accent); }
+.how h2 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(40px, 4vw, 64px);
+font-weight: 300;
+line-height: 1.1;
+margin-bottom: 80px;
+max-width: 500px;
+}
+.how h2 em { font-style: italic; color: var(–accent); }
+.steps-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 48px;
+position: relative;
+}
+.steps-grid::before {
+content: ‘’;
+position: absolute;
+top: 32px; left: calc(16.66% + 24px);
+right: calc(16.66% + 24px);
+height: 1px;
+background: linear-gradient(90deg, rgba(196,168,130,0.3), rgba(196,168,130,0.3));
+border-top: 1px dashed rgba(196,168,130,0.3);
+}
+.step {
+position: relative;
+padding-top: 80px;
+}
+.step-num {
+position: absolute; top: 0; left: 0;
+width: 64px; height: 64px;
+border: 1px solid rgba(196,168,130,0.3);
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 28px; font-weight: 300;
+color: var(–accent);
+background: rgba(212,98,42,0.08);
+}
+.step h3 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 26px; font-weight: 400;
+margin-bottom: 16px;
+color: var(–cream);
+}
+.step p {
+font-size: 15px; line-height: 1.7;
+color: rgba(247,240,230,0.6);
+font-weight: 300;
+}
+
+/* WHY */
+.why {
+padding: 140px 80px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: center;
+}
+.why-left h2 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(40px, 4vw, 60px);
+font-weight: 300;
+line-height: 1.1;
+margin-bottom: 24px;
+}
+.why-left h2 em { font-style: italic; color: var(–orange); }
+.why-left p {
+font-size: 16px; line-height: 1.8;
+color: var(–warm-gray); font-weight: 300;
+margin-bottom: 48px;
+}
+.why-cards { display: flex; flex-direction: column; gap: 20px; }
+.why-card {
+display: flex; gap: 20px;
+padding: 24px;
+border-radius: 12px;
+border: 1px solid rgba(196,168,130,0.25);
+background: var(–white);
+transition: border-color 0.3s, transform 0.3s;
+}
+.why-card:hover { border-color: var(–orange); transform: translateX(6px); }
+.why-icon {
+font-size: 28px;
+width: 56px; height: 56px;
+background: rgba(212,98,42,0.08);
+border-radius: 12px;
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+}
+.why-text h4 {
+font-size: 16px; font-weight: 500;
+color: var(–brown); margin-bottom: 6px;
+}
+.why-text p {
+font-size: 14px; line-height: 1.6;
+color: var(–warm-gray); font-weight: 300;
+margin: 0;
+}
+
+/* SECOND MOCKUP - RULES */
+.mockup-rules {
+background: var(–white);
+border-radius: 16px;
+box-shadow: 0 40px 80px rgba(44,26,14,0.1), 0 0 0 1px rgba(196,168,130,0.15);
+overflow: hidden;
+}
+.rules-header {
+padding: 20px 24px;
+border-bottom: 1px solid rgba(196,168,130,0.2);
+display: flex; align-items: center; justify-content: space-between;
+}
+.rules-title {
+font-size: 14px; font-weight: 500; color: var(–brown);
+}
+.rules-add {
+font-size: 12px; color: var(–orange);
+background: rgba(212,98,42,0.1);
+padding: 6px 12px; border-radius: 6px;
+font-weight: 500;
+}
+.rule-item {
+padding: 18px 24px;
+border-bottom: 1px solid rgba(196,168,130,0.1);
+display: flex; align-items: center; gap: 16px;
+}
+.rule-dot {
+width: 8px; height: 8px; border-radius: 50%;
+background: var(–orange); flex-shrink: 0;
+}
+.rule-dot.gray { background: var(–light-brown); }
+.rule-info { flex: 1; }
+.rule-name { font-size: 14px; font-weight: 500; color: var(–brown); }
+.rule-detail { font-size: 12px; color: var(–warm-gray); margin-top: 3px; }
+.rule-toggle {
+width: 36px; height: 20px;
+background: var(–orange);
+border-radius: 10px;
+position: relative;
+}
+.rule-toggle::after {
+content: ‘’;
+position: absolute; top: 3px; right: 3px;
+width: 14px; height: 14px;
+background: white; border-radius: 50%;
+}
+.rule-toggle.off { background: rgba(196,168,130,0.4); }
+.rule-toggle.off::after { right: auto; left: 3px; }
+
+/* TESTIMONIALS */
+.testimonials {
+padding: 140px 80px;
+background: var(–brown);
+color: var(–cream);
+overflow: hidden;
+}
+.testimonials .section-label { color: var(–accent); }
+.testimonials .section-label::after { background: var(–accent); }
+.testimonials h2 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(36px, 3.5vw, 54px);
+font-weight: 300;
+margin-bottom: 64px;
+max-width: 500px;
+line-height: 1.1;
+}
+.testimonials h2 em { font-style: italic; color: var(–accent); }
+.testimonials-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 28px;
+}
+.testimonial-card {
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(196,168,130,0.15);
+border-radius: 16px;
+padding: 32px;
+transition: background 0.3s, transform 0.3s;
+position: relative;
+}
+.testimonial-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
+.quote-mark {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 72px; line-height: 0.5;
+color: var(–orange); opacity: 0.4;
+margin-bottom: 20px;
+display: block;
+}
+.testimonial-text {
+font-size: 15px; line-height: 1.75;
+color: rgba(247,240,230,0.8);
+font-weight: 300;
+margin-bottom: 28px;
+font-style: italic;
+}
+.testimonial-author {
+display: flex; align-items: center; gap: 14px;
+}
+.author-avatar {
+width: 44px; height: 44px;
+border-radius: 50%;
+background: rgba(212,98,42,0.2);
+display: flex; align-items: center; justify-content: center;
+font-size: 16px; font-weight: 600;
+color: var(–accent);
+font-family: ‘Cormorant Garamond’, serif;
+}
+.author-name { font-size: 14px; font-weight: 500; color: var(–cream); }
+.author-role { font-size: 12px; color: rgba(247,240,230,0.5); margin-top: 2px; }
+
+/* PRICING */
+.pricing {
+padding: 140px 80px;
+text-align: center;
+background: var(–cream);
+}
+.pricing h2 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(40px, 4vw, 60px);
+font-weight: 300;
+margin-bottom: 20px;
+}
+.pricing h2 em { font-style: italic; color: var(–orange); }
+.pricing-sub {
+font-size: 17px; color: var(–warm-gray);
+max-width: 520px; margin: 0 auto 64px;
+line-height: 1.7; font-weight: 300;
+}
+.pricing-card {
+max-width: 480px; margin: 0 auto;
+background: var(–white);
+border-radius: 20px;
+padding: 48px;
+border: 1px solid rgba(196,168,130,0.25);
+box-shadow: 0 24px 64px rgba(44,26,14,0.08);
+position: relative;
+overflow: hidden;
+}
+.pricing-card::before {
+content: ‘’;
+position: absolute; top: 0; left: 0; right: 0;
+height: 4px;
+background: linear-gradient(90deg, var(–orange), var(–accent));
+}
+.pricing-model {
+font-size: 13px; font-weight: 500;
+color: var(–orange); letter-spacing: 2px;
+text-transform: uppercase; margin-bottom: 16px;
+}
+.pricing-headline {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 36px; font-weight: 300;
+color: var(–brown); margin-bottom: 12px;
+}
+.pricing-desc {
+font-size: 15px; color: var(–warm-gray);
+line-height: 1.7; font-weight: 300;
+margin-bottom: 36px;
+}
+.pricing-features {
+list-style: none;
+text-align: left;
+margin-bottom: 40px;
+}
+.pricing-features li {
+padding: 12px 0;
+border-bottom: 1px solid rgba(196,168,130,0.15);
+display: flex; align-items: center; gap: 12px;
+font-size: 15px; color: var(–brown);
+}
+.pricing-features li::before {
+content: ‘✓’;
+color: var(–orange); font-weight: 600;
+font-size: 14px;
+}
+
+/* CTA FINALE */
+.cta-final {
+padding: 160px 80px;
+background: var(–orange);
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.cta-final::before {
+content: ‘🎂’;
+position: absolute;
+font-size: 300px;
+opacity: 0.06;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+pointer-events: none;
+}
+.cta-final h2 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(44px, 5vw, 72px);
+font-weight: 300;
+color: var(–white);
+line-height: 1.1;
+margin-bottom: 24px;
+position: relative;
+}
+.cta-final h2 em { font-style: italic; font-weight: 400; }
+.cta-final p {
+font-size: 18px; color: rgba(253,250,246,0.8);
+max-width: 480px; margin: 0 auto 48px;
+line-height: 1.7; font-weight: 300;
+position: relative;
+}
+.btn-white {
+background: var(–white);
+color: var(–orange);
+padding: 18px 44px;
+border-radius: 4px;
+font-size: 15px; font-weight: 500;
+text-decoration: none;
+display: inline-flex; align-items: center; gap: 10px;
+transition: all 0.25s;
+letter-spacing: 0.3px;
+position: relative;
+}
+.btn-white:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(44,26,14,0.25); }
+
+/* FOOTER */
+footer {
+padding: 48px 80px;
+background: var(–brown);
+display: flex; align-items: center; justify-content: space-between;
+flex-wrap: wrap; gap: 20px;
+}
+.footer-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px; font-weight: 600;
+color: var(–cream);
+text-decoration: none;
+}
+.footer-logo span { color: var(–accent); }
+.footer-links {
+display: flex; gap: 32px; list-style: none;
+}
+.footer-links a {
+font-size: 13px; color: rgba(247,240,230,0.5);
+text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(–cream); }
+.footer-right {
+font-size: 13px; color: rgba(247,240,230,0.4);
+display: flex; align-items: center; gap: 8px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+.reveal {
+opacity: 0; transform: translateY(32px);
+transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+opacity: 1; transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+.hero { grid-template-columns: 1fr; }
+.hero-right { display: none; }
+.hero-left { padding: 120px 32px 80px; }
+.how, .why, .testimonials, .pricing, .cta-final { padding: 80px 32px; }
+.steps-grid, .testimonials-grid { grid-template-columns: 1fr; }
+.why { grid-template-columns: 1fr; }
+nav { padding: 20px 24px; }
+nav.scrolled { padding: 14px 24px; }
+.nav-links { display: none; }
+footer { flex-direction: column; align-items: flex-start; padding: 40px 32px; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAVBAR -->
+
+<nav id="navbar">
+  <a href="#" class="nav-logo">You <span>Cake</span> My Day</a>
+  <ul class="nav-links">
+    <li><a href="#come-funziona">Come funziona</a></li>
+    <li><a href="#perche">Perché noi</a></li>
+    <li><a href="#testimonial">Clienti</a></li>
+    <li><a href="#pricing">Prezzi</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-switch" id="langSwitch" onclick="toggleLang()">🇬🇧 EN</button>
+    <a href="#demo" class="btn-demo" data-it="Prenota una demo" data-en="Book a demo">Prenota una demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag" data-it="Milano · Artigianale · Automatico" data-en="Milan · Artisan · Automatic">Milano · Artigianale · Automatico</div>
+    <h1 data-it="Il compleanno dei tuoi dipendenti, <em>automatico.</em>" data-en="Your employees' birthdays, <em>handled.</em>">
+      Il compleanno dei tuoi<br>dipendenti, <em>automatico.</em>
+    </h1>
+    <p class="hero-sub" data-it="You Cake My Day consegna una torta artigianale in ufficio per ogni compleanno del tuo team. Tu imposti le regole una volta. Noi pensiamo a tutto il resto." data-en="You Cake My Day delivers an artisan cake to the office for every team birthday. You set the rules once. We handle everything else.">
+      You Cake My Day consegna una torta artigianale in ufficio per ogni compleanno del tuo team. Tu imposti le regole una volta. Noi pensiamo a tutto il resto.
+    </p>
+    <div class="hero-cta">
+      <a href="#demo" class="btn-primary" data-it="Prenota una demo" data-en="Book a demo">
+        Prenota una demo
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <span class="hero-note" data-it="Nessun abbonamento. Paghi solo le torte." data-en="No subscription. Pay per cake.">Nessun abbonamento. Paghi solo le torte.</span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-bg-circle"></div>
+    <div class="dashboard-mockup">
+      <div class="mockup-bar">
+        <div class="mockup-dot" style="background:#E74C3C"></div>
+        <div class="mockup-dot" style="background:#F1C40F"></div>
+        <div class="mockup-dot" style="background:#2ECC71"></div>
+        <span class="mockup-bar-title">app.youcakemyday.com</span>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-section-title">Prossime consegne</div>
+        <div class="cake-row upcoming">
+          <div class="cake-emoji">🎂</div>
+          <div class="cake-info">
+            <div class="cake-name">Marco Bianchi</div>
+            <div class="cake-date">Domani · Torta al cioccolato</div>
+          </div>
+          <span class="cake-badge badge-soon">Domani</span>
+        </div>
+        <div class="cake-row">
+          <div class="cake-emoji">🎂</div>
+          <div class="cake-info">
+            <div class="cake-name">Sara Colombo</div>
+            <div class="cake-date">15 mag · Torta alla fragola</div>
+          </div>
+          <span class="cake-badge badge-ok">Fra 5 giorni</span>
+        </div>
+        <div class="cake-row">
+          <div class="cake-emoji">🎂</div>
+          <div class="cake-info">
+            <div class="cake-name">Luca Ferrari</div>
+            <div class="cake-date">22 mag · Torta alla vaniglia</div>
+          </div>
+          <span class="cake-badge badge-ok">Fra 12 giorni</span>
+        </div>
+        <div class="mockup-divider"></div>
+        <div class="mockup-stat-row">
+          <div class="mockup-stat">
+            <div class="stat-num">24</div>
+            <div class="stat-label">Dipendenti</div>
+          </div>
+          <div class="mockup-stat">
+            <div class="stat-num">12</div>
+            <div class="stat-label">Consegnate</div>
+          </div>
+          <div class="mockup-stat" style="background:rgba(212,98,42,0.08); border-color:rgba(212,98,42,0.2)">
+            <div class="stat-num" style="color:var(--orange)">3</div>
+            <div class="stat-label">In arrivo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floating-badge">
+      <span class="badge-icon">🎉</span>
+      <div class="badge-text">
+        <strong>Consegnata!</strong>
+        <span>Giulia R. · oggi alle 9:00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scorri per scoprire
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+
+<section class="how" id="come-funziona">
+  <div class="section-label reveal">Come funziona</div>
+  <h2 class="reveal reveal-delay-1" data-it="Tre passi. <em>Zero pensieri.</em>" data-en="Three steps. <em>Zero effort.</em>">Tre passi. <em>Zero pensieri.</em></h2>
+  <div class="steps-grid">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3 data-it="Carica il tuo team" data-en="Upload your team">Carica il tuo team</h3>
+      <p data-it="Importa i dipendenti con un file CSV o collega il tuo gestionale HR. Un minuto, una volta sola." data-en="Import employees with a CSV or connect your HR system. One minute, done forever.">Importa i dipendenti con un file CSV o collega il tuo gestionale HR. Un minuto, una volta sola.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">2</div>
+      <h3 data-it="Imposta le regole" data-en="Set your rules">Imposta le regole</h3>
+      <p data-it="Quale torta, quale sede, quali occasioni. Tu decidi, il sistema ricorda. Cambia quando vuoi." data-en="Which cake, which office, which occasions. You decide, the system remembers. Change anytime.">Quale torta, quale sede, quali occasioni. Tu decidi, il sistema ricorda. Cambia quando vuoi.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">3</div>
+      <h3 data-it="Ci pensiamo noi" data-en="We handle it">Ci pensiamo noi</h3>
+      <p data-it="La torta arriva in ufficio la mattina del compleanno. Nessuna telefonata, nessun ritardo, nessuna sorpresa." data-en="The cake arrives at the office on the morning of the birthday. No calls, no delays, no surprises.">La torta arriva in ufficio la mattina del compleanno. Nessuna telefonata, nessun ritardo, nessuna sorpresa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+
+<section class="why" id="perche">
+  <div class="why-left">
+    <div class="section-label reveal">Perché funziona</div>
+    <h2 class="reveal reveal-delay-1" data-it="Il momento più semplice che fa sentire le persone <em>viste.</em>" data-en="The simplest gesture that makes people feel <em>seen.</em>">Il momento più semplice che fa sentire le persone <em>viste.</em></h2>
+    <p class="reveal reveal-delay-2" data-it="Passare 90.000 ore della propria vita al lavoro è tanto. Un compleanno ricordato, con una torta vera, cambia il lunedì mattina." data-en="Spending 90,000 hours of your life at work is a lot. A remembered birthday, with a real cake, changes Monday morning.">Passare 90.000 ore della propria vita al lavoro è tanto. Un compleanno ricordato, con una torta vera, cambia il lunedì mattina.</p>
+    <a href="#demo" class="btn-primary reveal reveal-delay-3" style="align-self:flex-start" data-it="Prenota una demo" data-en="Book a demo">
+      Prenota una demo
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+  <div class="why-right reveal reveal-delay-1">
+    <div class="mockup-rules" style="margin-bottom:24px">
+      <div class="rules-header">
+        <span class="rules-title">Le tue regole attive</span>
+        <span class="rules-add">+ Aggiungi regola</span>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot"></div>
+        <div class="rule-info">
+          <div class="rule-name">Tutti i compleanni</div>
+          <div class="rule-detail">Torta al cioccolato · 8 porzioni · Sede principale</div>
+        </div>
+        <div class="rule-toggle"></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot"></div>
+        <div class="rule-info">
+          <div class="rule-name">Compleanni tondi</div>
+          <div class="rule-detail">Torta grande · 16 porzioni · Tutte le sedi</div>
+        </div>
+        <div class="rule-toggle"></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot gray"></div>
+        <div class="rule-info">
+          <div class="rule-name">Anniversari aziendali</div>
+          <div class="rule-detail">Torta personalizzata · Al momento disattiva</div>
+        </div>
+        <div class="rule-toggle off"></div>
+      </div>
+    </div>
+    <div class="why-cards">
+      <div class="why-card reveal">
+        <div class="why-icon">🎂</div>
+        <div class="why-text">
+          <h4 data-it="Artigianale" data-en="Artisan quality">Artigianale</h4>
+          <p data-it="Torte prodotte da pasticcerie selezionate a Milano. Ingredienti veri, non grande distribuzione." data-en="Cakes from selected Milan bakeries. Real ingredients, not mass production.">Torte prodotte da pasticcerie selezionate a Milano. Ingredienti veri, non grande distribuzione.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-1">
+        <div class="why-icon">⚙️</div>
+        <div class="why-text">
+          <h4 data-it="Completamente automatico" data-en="Fully automatic">Completamente automatico</h4>
+          <p data-it="Zero intervento dopo il setup. Il sistema gira da solo 365 giorni l'anno, senza che tu ci pensi." data-en="Zero intervention after setup. The system runs alone 365 days a year.">Zero intervento dopo il setup. Il sistema gira da solo 365 giorni l'anno, senza che tu ci pensi.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <div class="why-icon">📦</div>
+        <div class="why-text">
+          <h4 data-it="Consegna puntuale" data-en="Reliable delivery">Consegna puntuale</h4>
+          <p data-it="Ogni mattina, in orario. Con notifica in anticipo e tracciamento dell'ordine." data-en="Every morning, on time. With advance notification and order tracking.">Ogni mattina, in orario. Con notifica in anticipo e tracciamento dell'ordine.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+
+<section class="testimonials" id="testimonial">
+  <div class="section-label reveal">Clienti</div>
+  <h2 class="reveal reveal-delay-1" data-it="Le aziende che non dimenticano <em>più un compleanno.</em>" data-en="The companies that never forget <em>a birthday again.</em>">Le aziende che non dimenticano <em>più un compleanno.</em></h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text" data-it="Setup in 5 minuti, zero pensieri da allora. I miei colleghi adorano trovare la torta sulla scrivania ogni mattina. Non tornerei mai indietro." data-en="5-minute setup, zero thoughts since. My colleagues love finding the cake on the desk every morning. I'd never go back.">Setup in 5 minuti, zero pensieri da allora. I miei colleghi adorano trovare la torta sulla scrivania ogni mattina. Non tornerei mai indietro.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">GR</div>
+        <div>
+          <div class="author-name">Giulia Rossi</div>
+          <div class="author-role">HR Manager · Startup tech, Milano</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-1">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text" data-it="Finalmente un servizio che fa quello che dice. Puntuale, buono, e il team lo aspetta ogni volta. Piccolo gesto, grande impatto sulla cultura aziendale." data-en="Finally a service that does what it says. Punctual, delicious, and the team looks forward to it every time. Small gesture, big impact on company culture.">Finalmente un servizio che fa quello che dice. Puntuale, buono, e il team lo aspetta ogni volta. Piccolo gesto, grande impatto sulla cultura aziendale.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">MT</div>
+        <div>
+          <div class="author-name">Marco Torresan</div>
+          <div class="author-role">CEO · Agenzia creativa, Milano</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text" data-it="Non immaginavo quanto potesse impattare sul team. Le persone si sentono viste. E io non devo ricordarmi più niente. You Cake My Day fa tutto." data-en="I had no idea how much it would impact the team. People feel seen. And I don't have to remember anything anymore. You Cake My Day does it all.">Non immaginavo quanto potesse impattare sul team. Le persone si sentono viste. E io non devo ricordarmi più niente. You Cake My Day fa tutto.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SM</div>
+        <div>
+          <div class="author-name">Sara Manzoni</div>
+          <div class="author-role">Office Manager · Scaleup fintech, Milano</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+
+<section class="pricing" id="pricing">
+  <div class="section-label reveal" style="justify-content:center">Prezzi</div>
+  <h2 class="reveal reveal-delay-1" data-it="Semplice come <em>ordinare una torta.</em>" data-en="Simple as <em>ordering a cake.</em>">Semplice come <em>ordinare una torta.</em></h2>
+  <p class="pricing-sub reveal reveal-delay-2" data-it="Paghi solo le torte consegnate. Nessun abbonamento, nessun costo fisso. Costruiamo insieme il piano giusto per il tuo team." data-en="You only pay for cakes delivered. No subscription, no fixed costs. We'll build the right plan for your team together.">Paghi solo le torte consegnate. Nessun abbonamento, nessun costo fisso. Costruiamo insieme il piano giusto per il tuo team.</p>
+  <div class="pricing-card reveal reveal-delay-1">
+    <div class="pricing-model">Pay per cake</div>
+    <div class="pricing-headline" data-it="Solo quello che usi." data-en="Only what you use.">Solo quello che usi.</div>
+    <div class="pricing-desc" data-it="Una torta consegnata, un pagamento. Nessun costo fisso mensile. Perfetto per team di ogni dimensione." data-en="One cake delivered, one payment. No monthly fixed cost. Perfect for teams of any size.">Una torta consegnata, un pagamento. Nessun costo fisso mensile. Perfetto per team di ogni dimensione.</div>
+    <ul class="pricing-features">
+      <li data-it="Dashboard completa inclusa" data-en="Full dashboard included">Dashboard completa inclusa</li>
+      <li data-it="Torte artigianali selezionate" data-en="Selected artisan cakes">Torte artigianali selezionate</li>
+      <li data-it="Consegna in ufficio inclusa" data-en="Office delivery included">Consegna in ufficio inclusa</li>
+      <li data-it="Notifiche e reminder automatici" data-en="Automatic notifications and reminders">Notifiche e reminder automatici</li>
+      <li data-it="Setup e supporto gratuiti" data-en="Free setup and support">Setup e supporto gratuiti</li>
+    </ul>
+    <a href="#demo" class="btn-primary" style="width:100%; justify-content:center" data-it="Prenota una demo gratuita" data-en="Book a free demo">
+      Prenota una demo gratuita
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- CTA FINALE -->
+
+<section class="cta-final" id="demo">
+  <h2 class="reveal" data-it="Il prossimo compleanno in ufficio <em>non lo dimenticherai.</em>" data-en="The next office birthday <em>won't be forgotten.</em>">Il prossimo compleanno in ufficio <em>non lo dimenticherai.</em></h2>
+  <p class="reveal reveal-delay-1" data-it="Prenota una demo gratuita. Ti mostriamo come funziona in 15 minuti." data-en="Book a free demo. We'll show you how it works in 15 minutes.">Prenota una demo gratuita. Ti mostriamo come funziona in 15 minuti.</p>
+  <a href="https://calendly.com" target="_blank" class="btn-white reveal reveal-delay-2">
+    <span data-it="Prenota una demo" data-en="Book a demo">Prenota una demo</span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+  <a href="#" class="footer-logo">You <span>Cake</span> My Day</a>
+  <ul class="footer-links">
+    <li><a href="#come-funziona" data-it="Come funziona" data-en="How it works">Come funziona</a></li>
+    <li><a href="#perche" data-it="Perché noi" data-en="Why us">Perché noi</a></li>
+    <li><a href="#demo" data-it="Demo" data-en="Demo">Demo</a></li>
+    <li><a href="mailto:ciao@youcakemyday.com">ciao@youcakemyday.com</a></li>
+  </ul>
+  <div class="footer-right">Made in Milano 🇮🇹</div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      cursorRing.style.opacity = '0';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      cursorRing.style.opacity = '0.5';
+    });
+  });
+
+  // NAVBAR SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+
+  // LANGUAGE SWITCH
+  let currentLang = 'it';
+  function toggleLang() {
+    currentLang = currentLang === 'it' ? 'en' : 'it';
+    const btn = document.getElementById('langSwitch');
+    btn.textContent = currentLang === 'it' ? '🇬🇧 EN' : '🇮🇹 IT';
+    document.querySelectorAll('[data-it]').forEach(el => {
+      const text = el.getAttribute('data-' + currentLang);
+      if (text) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = text;
+        } else {
+          el.innerHTML = text;
+        }
+      }
+    });
+    document.documentElement.lang = currentLang;
+  }
+</script>
+
+</body>
+</html>
